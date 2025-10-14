@@ -58,35 +58,35 @@ def main():
         msg_type = fix.get("35")
 
         #Checks for New Order Single(D) and Limit Order (2)
-        if msg_type == 'D' and fix['40'] == '2':
-            client_order_id = fix['11']
+        if msg_type == 'D' and fix.get('40') == '2':
+            client_order_id = fix.get('11')
             if client_order_id:
                 orders[client_order_id] = {
                     'OrderID': client_order_id,
-                    'OrderTransactTime': fix['60'],
-                    'Symbol': fix['55'],
-                    'Side': fix['54'],
-                    'OrderQty': fix['38'],
-                    'LimitPrice': fix['44'],
+                    'OrderTransactTime': fix.get('60', ''),
+                    'Symbol': fix.get('55', ''),
+                    'Side': fix.get('54', ''),
+                    'OrderQty': fix.get('38', ''),
+                    'LimitPrice': fix.get('44', ''),
                 }
 
         #Checks for MsgType (35) = Execution Report (8)
         elif msg_type == '8':
             # Check for Fully Filled limit orders, ignore partially filled limit orders
-            if fix['150'] == '2' and fix['39'] == '2' and fix['40'] == '2':
-                client_order_id = fix['11']
+            if fix.get('150') == '2' and fix.get('39') == '2' and fix.get('40') == '2':
+                client_order_id = fix.get('11')
                 if client_order_id in orders:
                     order = orders[client_order_id]
                     fills.append({
                         'OrderID': client_order_id,
                         'OrderTransactTime': order['OrderTransactTime'],
-                        'ExecutionTransactTime': fix['60'],
+                        'ExecutionTransactTime': fix.get('60', ''),
                         'Symbol': order['Symbol'],
                         'Side': order['Side'],
                         'OrderQty': order['OrderQty'],
                         'LimitPrice': order['LimitPrice'],
-                        'AvgPx': fix['6'],
-                        'LastMkt': fix['30'],
+                        'AvgPx': fix.get('6', ''),           # use .get() in case tag 6 is missing
+                        'LastMkt': fix.get('30', 'NA'),     #Tag 30 is missing at times, so add 'NA' alternative
                     })
 
     #Create dataframe of filled orders
