@@ -37,7 +37,7 @@ def parse_fix_line(line: str):
 
 
 def main():
-    
+
     #argparse used to assist in parsing arguments
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument('--input_fix_file', required=True)
@@ -99,9 +99,4 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyError as e:
-        # Helpful hard-stop if a required tag is missing (better than silently wrong output)
-        print(f"Missing expected FIX tag: {e}. Recheck that fields are inputed correctly.", file=sys.stderr)
-        sys.exit(1)
+    main()
