@@ -32,7 +32,7 @@ def main():
     #Calculate price improvement
     order_file['LimitPrice'] = pd.to_numeric(order_file['LimitPrice'], errors='coerce')
     order_file['AvgPx'] = pd.to_numeric(order_file['AvgPx'], errors='coerce')
-    order_file['PriceImprovement'] = (order_file['LimitPrice'] - order_file['AvgPx']).clip(lower=0)
+    order_file['PriceImprovement'] = abs(order_file['LimitPrice'] - order_file['AvgPx'])
 
     #Calculate average metrics 
     average_metrics = order_file.groupby('LastMkt', dropna=False).agg(
